@@ -12,14 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/punkdata/nodejs-circleci.git"
+    "url": "git+https://github.com/saisankar10/Npm-CircleCI-Jfrog.git"
   },
   "author": "Sai Sankar",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/punkdata/nodejs-circleci/issues"
-  },
-  "homepage": "https://github.com/punkdata/nodejs-circleci.git#readme",
+  "homepage": "https://github.com/saisankar10/Npm-CircleCI-Jfrog.git#readme",
   "dependencies": {
     "ejs": "^2.6.1",
     "express": "^4.16.4",
