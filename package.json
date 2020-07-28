@@ -1,6 +1,6 @@
 {
-  "name": "sai-circlenpm",
-  "version": "0.0.1",
+  "name": "nodejs-circleci",
+  "version": "0.0.2",
   "description": "nodejs-circleci",
   "main": "app.js",
   "directories": {
