@@ -1,37 +1,97 @@
 version: 2.1
 jobs:
-  run_tests:
+  Slack_setup:
+    machine:
+        image: 'ubuntu-1604:201903-01'
+    steps:
+       - slack/approval:
+          message: "Deployment Pending for Approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'" # Optional: Enter your own message
+          mentions: "W015C9HCQSH,W01232MH4GM,W016RHZPZ1A" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
+          color: "#42e2f4" # Optional: Assign custom colors for each approval message
+          webhook: "$SLACK_WEBHOOK" # Optional: Enter a specific webhook here or the default will use $SLACK_WEBHOOK
+          url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
+  Level2_Approvals:
+    machine:
+        image: 'ubuntu-1604:201903-01'
+    steps:
+       - slack/approval:
+          message: "Deployment Pending for Approvals level2 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'" # Optional: Enter your own message
+          mentions: "sai.sankar@crypto.com" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
+          color: "#42e2f4" # Optional: Assign custom colors for each approval message
+          webhook: "$SLACK_WEBHOOK" # Optional: Enter a specific webhook here or the default will use $SLACK_WEBHOOK
+          url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
+  Level3_Approvals:
+    machine:
+        image: 'ubuntu-1604:201903-01'
+    steps:
+       - slack/approval:
+          message: "Deployment Pending for Approvals Level3 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'" # Optional: Enter your own message
+          mentions: "sai.sankar@crypto.com" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
+          color: "#42e2f4" # Optional: Assign custom colors for each approval message
+          webhook: "$SLACK_WEBHOOK" # Optional: Enter a specific webhook here or the default will use $SLACK_WEBHOOK
+          url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
+      
+    
+  Publish_Npm_registry:
     working_directory: ~/repo
     docker:
       - image: circleci/node:12
     steps:
-      - checkout
       - run:
           name: Install npm dependencies
           command: |
             npm install --save
-      - run:
-          name: Run Unit Tests
-          command: |
-            ./node_modules/mocha/bin/mocha test/ --reporter mochawesome --reporter-options reportDir=test-results,reportFilename=test-results
       - persist_to_workspace:
           root: ~/repo
           paths: .
       - attach_workspace:
           at: ~/repo
+      - run: echo "Install Jfrog CLI"
+      - run: cd ~/repo
+      - run: curl -fL https://getcli.jfrog.io | sh
+      - run: ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
+      - run: ./jfrog rt dl "Crypto-Blockchain-jslib/neon-test/-/neon-test-0.1.0.tgz/package" --sort-by=created --sort-order=desc --limit=1
+      - run: cd ~/repo
+      - run: dir
+      #- run: tar -C ~/repo -xvf ~/repo/nodejs-circleci/-/nodejs-circleci-0.0.4.tgz
+      #- run: dir ~/repo/package
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      #- run: vi ~/repo/.npmrc
       - run:
-          name: Publish package
-          command: npm publish
+          name: Publish npm package
+          command: cd ~/repo && npm publish
       - store_test_results:
           path: test-results
       - store_artifacts:
           path: test-results
-  
+      - jira/notify
+orbs:
+  slack: circleci/slack@3.4.2
+  jira: circleci/jira@1.2.2
 workflows:
-  build_test:
+  your-workflow:
     jobs:
-      - run_tests
-      
+      - Slack_setup
+      - hold:
+            type: approval
+            requires:
+              - Slack_setup
+      - Level2_Approvals:
+            requires:
+              - hold
+      - hold2:
+            type: approval
+            requires: 
+              - Level2_Approvals              
+      - Level3_Approvals:
+            requires:
+              - hold2
+      - hold3:
+            type: approval
+            requires:
+              - Level3_Approvals
+      - Publish_Npm_registry:
+            requires:
+            - hold3
