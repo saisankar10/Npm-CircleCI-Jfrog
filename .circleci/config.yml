@@ -52,15 +52,15 @@ jobs:
       - run: ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
       - run: ./jfrog rt dl "Crypto-Blockchain-jslib/neon-test/-/" --sort-by=created --sort-order=desc --limit=1
       - run: cd ~/repo && dir
-      - run: tar -C ~/repo -xvf ~/repo/neon-test/-/*.tgz
-      - run: dir ~/repo/package
+      - run: tar -C ~/ -xvf ~/repo/neon-test/-/*.tgz
+      - run: dir ~/package
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
       #- run: vi ~/repo/.npmrc
       - run:
           name: Publish npm package
-          command: cd ~/repo/package && npm publish
+          command: cd ~/package && npm publish
       - store_test_results:
           path: test-results
       - store_artifacts:
