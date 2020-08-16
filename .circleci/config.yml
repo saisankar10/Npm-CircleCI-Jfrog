@@ -52,7 +52,7 @@ jobs:
       - run: ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
       - run: ./jfrog rt dl "Crypto-Blockchain-jslib/neon-test/-/" --sort-by=created --sort-order=desc --limit=1
       - run: cd ~/repo && dir
-      - run: tar -C ~/repo -xvf ~/repo/neon-test/-/neon-test-0.1.0.tgz
+      - run: tar -C ~/repo -xvf ~/repo/neon-test/-/*.tgz
       - run: dir ~/repo/package
       - run:
           name: Authenticate with registry
