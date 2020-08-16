@@ -50,7 +50,7 @@ jobs:
       - run: cd ~/repo
       - run: curl -fL https://getcli.jfrog.io | sh
       - run: ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
-      - run: ./jfrog rt dl "Crypto-Blockchain-jslib/neon-test/-/" --sort-by=created --sort-order=desc --limit=1
+      - run: ./jfrog rt dl "Demo-npm-local/nodejs-circleci/-/" --sort-by=created --sort-order=desc --limit=1
       - run: cd ~/repo && dir
       - run: tar -C ~/ -xvf ~/repo/neon-test/-/*.tgz
       - run: cp -r ~/package/* ~/repo/
