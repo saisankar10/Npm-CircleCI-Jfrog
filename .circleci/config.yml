@@ -60,7 +60,7 @@ jobs:
       #- run: vi ~/repo/.npmrc
       - run:
           name: Publish npm package
-          command: cd ~/package && npm publish
+          command: npm publish
       - store_test_results:
           path: test-results
       - store_artifacts:
