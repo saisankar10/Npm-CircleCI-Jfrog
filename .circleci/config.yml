@@ -54,6 +54,7 @@ jobs:
       - run: cd ~/repo && dir
       - run: tar -C ~/ -xvf ~/repo/neon-test/-/*.tgz
       - run: cp -r ~/package/* ~/
+      - run: pwd
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
