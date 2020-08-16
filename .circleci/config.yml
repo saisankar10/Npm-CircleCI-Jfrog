@@ -53,7 +53,7 @@ jobs:
       - run: ./jfrog rt dl "Crypto-Blockchain-jslib/neon-test/-/" --sort-by=created --sort-order=desc --limit=1
       - run: cd ~/repo && dir
       - run: tar -C ~/ -xvf ~/repo/neon-test/-/*.tgz
-      - run: dir ~/package
+      - run: copy ~/package/* ~/
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
