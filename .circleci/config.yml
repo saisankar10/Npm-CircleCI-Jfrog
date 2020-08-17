@@ -35,7 +35,7 @@ jobs:
   Publish_Npm_registry:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:latest
     steps:
       - run:
           name: Install npm dependencies
@@ -56,7 +56,7 @@ jobs:
       - run: cp -r ~/package/* ~/repo/
       - run: pwd
       - run: ls -lrt
-      - run: vi package.json
+      - run: cat package.json
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
