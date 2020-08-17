@@ -55,6 +55,8 @@ jobs:
       - run: tar -C ~/ -xvf ~/repo/@crypto-com/chain-nodelib/-/*.tgz
       - run: cp -r ~/package/* ~/repo/
       - run: pwd
+      - run: ls -lrt
+      - run: vi package.json
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
