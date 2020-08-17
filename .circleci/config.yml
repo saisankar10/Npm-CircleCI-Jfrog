@@ -61,7 +61,7 @@ jobs:
       #- run: vi ~/repo/.npmrc
       - run:
           name: Publish npm package
-          command: npm publish
+          command: npm publish --access public
       - store_test_results:
           path: test-results
       - store_artifacts:
@@ -72,18 +72,18 @@ orbs:
 workflows:
   your-workflow:
     jobs:
-      - Slack_setup
-      - hold:
-            type: approval
-            requires:
-              - Slack_setup
-      - Level2_Approvals:
-            requires:
-              - hold
-      - hold2:
-            type: approval
-            requires: 
-              - Level2_Approvals              
+      #- Slack_setup
+      #- hold:
+      #      type: approval
+      #      requires:
+      #        - Slack_setup
+      #- Level2_Approvals:
+      #      requires:
+      #        - hold
+      #- hold2:
+      #      type: approval
+      #      requires: 
+      #        - Level2_Approvals              
       #- Level3_Approvals:
       #      requires:
       #        - hold2
@@ -92,5 +92,5 @@ workflows:
       #      requires:
       #        - Level3_Approvals
       - Publish_Npm_registry:
-            requires:
-            - hold2
+      #      requires:
+      #      - hold2
