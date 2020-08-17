@@ -6,7 +6,7 @@ jobs:
     steps:
        - slack/approval:
           message: "Deployment Pending for Approvals 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'" # Optional: Enter your own message
-          mentions: "W015C9HCQSH,W01232MH4GM,W016RHZPZ1A" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
+          mentions: "WN40PNWH3,WMR75TA02" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
           color: "#42e2f4" # Optional: Assign custom colors for each approval message
           webhook: "$SLACK_WEBHOOK" # Optional: Enter a specific webhook here or the default will use $SLACK_WEBHOOK
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
@@ -16,7 +16,7 @@ jobs:
     steps:
        - slack/approval:
           message: "Deployment Pending for Approvals level2 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'" # Optional: Enter your own message
-          mentions: "sai.sankar@crypto.com" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
+          mentions: "W01232MH4GM,WMSG8ECMR" # Optional: Enter the Slack IDs of any user or group (sub_team) to be mentioned
           color: "#42e2f4" # Optional: Assign custom colors for each approval message
           webhook: "$SLACK_WEBHOOK" # Optional: Enter a specific webhook here or the default will use $SLACK_WEBHOOK
           url: 'https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}'
@@ -50,9 +50,9 @@ jobs:
       - run: cd ~/repo
       - run: curl -fL https://getcli.jfrog.io | sh
       - run: ./jfrog rt config --url $ARTIFACTORY_URL --user $ARTIFACTORY_USER --password $ARTIFACTORY_PASSWORD --interactive=false
-      - run: ./jfrog rt dl "Demo-npm-local/nodejs-circleci/-/" --sort-by=created --sort-order=desc --limit=1
+      - run: ./jfrog rt dl "Crypto-Blockchain-jslib/chain-nodelib/-/" --sort-by=created --sort-order=desc --limit=1
       - run: cd ~/repo && dir
-      - run: tar -C ~/ -xvf ~/repo/nodejs-circleci/-/*.tgz
+      - run: tar -C ~/ -xvf ~/repo/chain-nodelib/-/*.tgz
       - run: cp -r ~/package/* ~/repo/
       - run: pwd
       - run:
@@ -74,17 +74,17 @@ workflows:
   your-workflow:
     jobs:
       - Slack_setup
-      #- hold:
-      #      type: approval
-      #      requires:
-      #        - Slack_setup
-      #- Level2_Approvals:
-      #      requires:
-      #        - hold
-      #- hold2:
-      #      type: approval
-      #      requires: 
-      #        - Level2_Approvals              
+      - hold:
+            type: approval
+            requires:
+              - Slack_setup
+      - Level2_Approvals:
+            requires:
+              - hold
+      - hold2:
+            type: approval
+            requires: 
+              - Level2_Approvals              
       #- Level3_Approvals:
       #      requires:
       #        - hold2
@@ -94,4 +94,4 @@ workflows:
       #        - Level3_Approvals
       - Publish_Npm_registry:
             requires:
-            - Slack_setup
+            - hold2
