@@ -63,7 +63,7 @@ jobs:
       #- run: vi ~/repo/.npmrc
       - run:
           name: Publish npm package
-          command: npm publish --access public
+          command: npm publish ~/repo/@crypto-com/chain-nodelib/-/*.tgz --access public
       - store_test_results:
           path: test-results
       - store_artifacts:
