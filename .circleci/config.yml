@@ -93,6 +93,6 @@ workflows:
       #      type: approval
       #      requires:
       #        - Level3_Approvals
-      - Publish_Npm_registry
+      - Publish_Npm_registry:
       #      requires:
       #      - hold2
